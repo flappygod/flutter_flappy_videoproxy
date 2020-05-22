@@ -33,9 +33,10 @@ class Flutterflappyvideoproxy {
   static void _addListeners(ProxyCacheProgressListener cacheProgressListener,
       ProxyCacheSuccessListener successListener, String backid) {
     //监听
-    _progressListeners[backid] = cacheProgressListener;
+    if (cacheProgressListener != null)
+      _progressListeners[backid] = cacheProgressListener;
     //监听
-    _successListeners[backid] = successListener;
+    if (successListener != null) _successListeners[backid] = successListener;
     //监听
     if (!_isListen) {
       _isListen = true;
