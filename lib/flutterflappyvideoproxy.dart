@@ -31,11 +31,11 @@ class Flutterflappyvideoproxy {
 
   //添加监听
   static void _addListeners(ProxyCacheProgressListener cacheProgressListener,
-      ProxyCacheSuccessListener successListener, String unique) {
+      ProxyCacheSuccessListener successListener, String backid) {
     //监听
-    _progressListeners[unique] = cacheProgressListener;
+    _progressListeners[backid] = cacheProgressListener;
     //监听
-    _successListeners[unique] = successListener;
+    _successListeners[backid] = successListener;
     //监听
     if (!_isListen) {
       _isListen = true;
@@ -53,9 +53,9 @@ class Flutterflappyvideoproxy {
               //进度
               String progress = map['progress'];
               //唯一值
-              String unique = map['unique'];
+              String backid = map['backid'];
               //缓存进度
-              ProxyCacheProgressListener listener = _progressListeners[unique];
+              ProxyCacheProgressListener listener = _progressListeners[backid];
               //缓存进度
               if (listener != null) {
                 listener(int.parse(progress));
@@ -66,22 +66,22 @@ class Flutterflappyvideoproxy {
           case 'cachedSuccess':
             {
               //唯一值
-              String unique = map['unique'];
+              String backid = map['backid'];
               //缓存进度
-              ProxyCacheSuccessListener listener = _successListeners[unique];
+              ProxyCacheSuccessListener listener = _successListeners[backid];
               //缓存进度
               if (listener != null) {
                 listener();
               }
-              _removeListeners(unique);
+              _removeListeners(backid);
               break;
             }
           //缓存停止
           case 'cachedStoped':
             {
               //唯一值
-              String unique = map['unique'];
-              _removeListeners(unique);
+              String backid = map['backid'];
+              _removeListeners(backid);
               break;
             }
         }
@@ -90,9 +90,9 @@ class Flutterflappyvideoproxy {
   }
 
   //移除监听
-  static void _removeListeners(String unique) {
-    _progressListeners.remove(unique);
-    _successListeners.remove(unique);
+  static void _removeListeners(String backid) {
+    _progressListeners.remove(backid);
+    _successListeners.remove(backid);
   }
 
   //获取缓存地址
@@ -107,11 +107,11 @@ class Flutterflappyvideoproxy {
   }
 
   //开始进行代理
-  static Future<String> proxyStart(String url) async {
+  static Future<String> proxyStart(String url, String unique) async {
     //如果是android
     if (Platform.isAndroid) {
-      final String version =
-          await _channel.invokeMethod('proxyStart', {"url": url});
+      final String version = await _channel
+          .invokeMethod('proxyStart', {"url": url, "unique": unique});
       return version;
     } else {
       return url;
@@ -119,10 +119,11 @@ class Flutterflappyvideoproxy {
   }
 
   //停止进行代理
-  static Future<bool> proxyStop(String url) async {
+  static Future<bool> proxyStop(String url, String unique) async {
     //如果是android
     if (Platform.isAndroid) {
-      final String ret = await _channel.invokeMethod('proxyStop', {"url": url});
+      final String ret = await _channel
+          .invokeMethod('proxyStop', {"url": url, "unique": unique});
       return ret == "0" ? false : true;
     } else {
       return true;
@@ -135,13 +136,13 @@ class Flutterflappyvideoproxy {
       ProxyCacheProgressListener progressListener,
       ProxyCacheSuccessListener successListener) async {
     if (Platform.isAndroid) {
-      String unique = DateTime.now().microsecondsSinceEpoch.toString();
+      String backid = DateTime.now().microsecondsSinceEpoch.toString();
 
-      _addListeners(progressListener, successListener, unique);
+      _addListeners(progressListener, successListener, backid);
 
       final String version = await _channel.invokeMethod('proxyCacheStart', {
         "url": url,
-        "unique": unique,
+        "backid": backid,
       });
       return version;
     } else {

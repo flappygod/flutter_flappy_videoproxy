@@ -13,12 +13,12 @@ public class RetProxyCacheListener implements ProxyCacheListener {
     private EventChannel.EventSink eventSink;
 
     //唯一ID
-    private String unique;
+    private String backid;
 
     //创建
     public RetProxyCacheListener(EventChannel.EventSink eventSink, String unique) {
         this.eventSink = eventSink;
-        this.unique = unique;
+        this.backid = unique;
     }
 
     @Override
@@ -26,7 +26,7 @@ public class RetProxyCacheListener implements ProxyCacheListener {
         if (this.eventSink != null) {
             HashMap<String, String> map = new HashMap<>();
             map.put("event", "cachedProgress");
-            map.put("unique", unique);
+            map.put("backid", backid);
             map.put("progress", Integer.toString(progress));
             this.eventSink.success(map);
         }
@@ -37,7 +37,7 @@ public class RetProxyCacheListener implements ProxyCacheListener {
         if (this.eventSink != null) {
             HashMap<String, String> map = new HashMap<>();
             map.put("event", "cachedSuccess");
-            map.put("unique", unique);
+            map.put("backid", backid);
             this.eventSink.success(map);
         }
     }
@@ -47,7 +47,7 @@ public class RetProxyCacheListener implements ProxyCacheListener {
         if (this.eventSink != null) {
             HashMap<String, String> map = new HashMap<>();
             map.put("event", "cachedStoped");
-            map.put("unique", unique);
+            map.put("backid", backid);
             this.eventSink.success(map);
         }
     }

@@ -90,8 +90,8 @@ public class FlutterflappyvideoproxyPlugin implements FlutterPlugin, MethodCallH
         else if (call.method.equals("proxyStart")) {
             //请求
             String url = call.argument("url");
-            //当前的路径
-            String path = FlappyProxyServer.getInstance(context).proxyStart(url);
+            String unique = call.argument("unique");
+            String path = FlappyProxyServer.getInstance(context).proxyStart(url,unique);
             //成功
             result.success(path);
         }
@@ -99,8 +99,8 @@ public class FlutterflappyvideoproxyPlugin implements FlutterPlugin, MethodCallH
         else if (call.method.equals("proxyStop")) {
             //请求
             String url = call.argument("url");
-            //当前的路径
-            boolean flag = FlappyProxyServer.getInstance(context).proxyStop(url);
+            String unique = call.argument("unique");
+            boolean flag = FlappyProxyServer.getInstance(context).proxyStop(url,unique);
             //成功
             if (flag) {
                 result.success("1");
@@ -112,10 +112,10 @@ public class FlutterflappyvideoproxyPlugin implements FlutterPlugin, MethodCallH
         else if (call.method.equals("proxyCacheStart")) {
             //请求
             String url = call.argument("url");
-            //标志唯一值的unique
-            String unique = call.argument("unique");
+            //标志唯一值的backid
+            String backid = call.argument("backid");
             //当前的路径
-            String path = FlappyProxyServer.getInstance(context).proxyCacheStart(url, new RetProxyCacheListener(meventSink, unique));
+            String path = FlappyProxyServer.getInstance(context).proxyCacheStart(url, new RetProxyCacheListener(meventSink, backid));
             //成功
             result.success(path);
         }
