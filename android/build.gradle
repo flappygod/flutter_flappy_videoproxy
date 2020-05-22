@@ -35,5 +35,5 @@ android {
 }
 
 dependencies {
-    implementation 'com.github.flappygod:ProxyVideoServer:1.6'
+    implementation 'com.github.flappygod:ProxyVideoServer:1.8'
 }
