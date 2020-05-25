@@ -4,6 +4,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Handler;
+import android.os.Message;
 
 import androidx.annotation.NonNull;
 
@@ -78,7 +80,7 @@ public class FlutterflappyvideoproxyPlugin implements FlutterPlugin, MethodCallH
     }
 
     @Override
-    public void onMethodCall(@NonNull MethodCall call, @NonNull Result result) {
+    public void onMethodCall(@NonNull MethodCall call, @NonNull final Result result) {
         //获取缓存地址
         if (call.method.equals("getCacheDictionary")) {
             //当前的路径
@@ -89,49 +91,113 @@ public class FlutterflappyvideoproxyPlugin implements FlutterPlugin, MethodCallH
         //开始代理
         else if (call.method.equals("proxyStart")) {
             //请求
-            String url = call.argument("url");
-            String unique = call.argument("unique");
-            String path = FlappyProxyServer.getInstance(context).proxyStart(url, unique);
-            //成功
-            result.success(path);
+            final String url = call.argument("url");
+            //唯一值
+            final String unique = call.argument("unique");
+            //创建handler
+            final Handler handler = new Handler() {
+                public void handleMessage(Message message) {
+                    //成功
+                    result.success(message.what);
+                }
+            };
+            //进行代理
+            new Thread() {
+                public void run() {
+                    //代理后的地址
+                    String path = FlappyProxyServer.getInstance(context).proxyStart(url, unique);
+                    //成功
+                    Message message = handler.obtainMessage(1, path);
+                    //发送成功的消息
+                    handler.sendMessage(message);
+                }
+            }.start();
         }
         //停止代理
         else if (call.method.equals("proxyStop")) {
             //请求
-            String url = call.argument("url");
-            String unique = call.argument("unique");
-            boolean flag = FlappyProxyServer.getInstance(context).proxyStop(url, unique);
-            //成功
-            if (flag) {
-                result.success("1");
-            } else {
-                result.success("0");
-            }
+            final String url = call.argument("url");
+            //唯一值
+            final String unique = call.argument("unique");
+            //当前的handler
+            final Handler handler = new Handler() {
+                public void handleMessage(Message message) {
+                    result.success(message.what);
+                }
+            };
+            //进行代理
+            new Thread() {
+                public void run() {
+                    boolean flag = FlappyProxyServer.getInstance(context).proxyStop(url, unique);
+                    //成功
+                    if (flag) {
+                        //成功
+                        Message message = handler.obtainMessage(1, "1");
+                        //发送成功的消息
+                        handler.sendMessage(message);
+                    } else {
+                        //成功
+                        Message message = handler.obtainMessage(1, "0");
+                        //发送成功的消息
+                        handler.sendMessage(message);
+                    }
+                }
+            }.start();
         }
         //回调
         else if (call.method.equals("proxyCacheStart")) {
             //请求
-            String url = call.argument("url");
+            final String url = call.argument("url");
             //标志唯一值的backid
-            String backid = call.argument("backid");
-            //当前的路径
-            String path = FlappyProxyServer.getInstance(context).proxyCacheStart(url, new RetProxyCacheListener(meventSink, backid));
-            //成功
-            result.success(path);
+            final String backid = call.argument("backid");
+            //当前的handler
+            final Handler handler = new Handler() {
+                public void handleMessage(Message message) {
+                    result.success(message.what);
+                }
+            };
+            //进行代理
+            new Thread() {
+                public void run() {
+                    //当前的路径
+                    String path = FlappyProxyServer.getInstance(context).proxyCacheStart(url, new RetProxyCacheListener(meventSink, backid));
+                    //成功
+                    Message message = handler.obtainMessage(1, path);
+                    //发送成功的消息
+                    handler.sendMessage(message);
+                }
+            }.start();
         }
 
         //回调
         else if (call.method.equals("proxyCacheStop")) {
             //请求
-            String url = call.argument("url");
-            //当前的路径
-            boolean flag = FlappyProxyServer.getInstance(context).proxyCacheStop(url);
-            //成功
-            if (flag) {
-                result.success("1");
-            } else {
-                result.success("0");
-            }
+            final String url = call.argument("url");
+            //当前的handler
+            final Handler handler = new Handler() {
+                public void handleMessage(Message message) {
+                    result.success(message.what);
+                }
+            };
+            //进行代理
+            new Thread() {
+                public void run() {
+                    //当前的路径
+                    boolean flag = FlappyProxyServer.getInstance(context).proxyCacheStop(url);
+                    //成功
+                    if (flag) {
+                        //成功
+                        Message message = handler.obtainMessage(1, "1");
+                        //发送成功的消息
+                        handler.sendMessage(message);
+                    } else {
+                        //成功
+                        Message message = handler.obtainMessage(1, "0");
+                        //发送成功的消息
+                        handler.sendMessage(message);
+                    }
+                }
+            }.start();
         }
         //清理
         else if (call.method.equals("cleanProxy")) {
