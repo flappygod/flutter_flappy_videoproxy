@@ -98,7 +98,7 @@ public class FlutterflappyvideoproxyPlugin implements FlutterPlugin, MethodCallH
             final Handler handler = new Handler() {
                 public void handleMessage(Message message) {
                     //成功
-                    result.success(message.what);
+                    result.success(message.obj);
                 }
             };
             //进行代理
@@ -122,7 +122,7 @@ public class FlutterflappyvideoproxyPlugin implements FlutterPlugin, MethodCallH
             //当前的handler
             final Handler handler = new Handler() {
                 public void handleMessage(Message message) {
-                    result.success(message.what);
+                    result.success(message.obj);
                 }
             };
             //进行代理
@@ -153,7 +153,7 @@ public class FlutterflappyvideoproxyPlugin implements FlutterPlugin, MethodCallH
             //当前的handler
             final Handler handler = new Handler() {
                 public void handleMessage(Message message) {
-                    result.success(message.what);
+                    result.success(message.obj);
                 }
             };
             //进行代理
@@ -176,7 +176,7 @@ public class FlutterflappyvideoproxyPlugin implements FlutterPlugin, MethodCallH
             //当前的handler
             final Handler handler = new Handler() {
                 public void handleMessage(Message message) {
-                    result.success(message.what);
+                    result.success(message.obj);
                 }
             };
             //进行代理
