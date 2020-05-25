@@ -91,7 +91,7 @@ public class FlutterflappyvideoproxyPlugin implements FlutterPlugin, MethodCallH
             //请求
             String url = call.argument("url");
             String unique = call.argument("unique");
-            String path = FlappyProxyServer.getInstance(context).proxyStart(url,unique);
+            String path = FlappyProxyServer.getInstance(context).proxyStart(url, unique);
             //成功
             result.success(path);
         }
@@ -100,7 +100,7 @@ public class FlutterflappyvideoproxyPlugin implements FlutterPlugin, MethodCallH
             //请求
             String url = call.argument("url");
             String unique = call.argument("unique");
-            boolean flag = FlappyProxyServer.getInstance(context).proxyStop(url,unique);
+            boolean flag = FlappyProxyServer.getInstance(context).proxyStop(url, unique);
             //成功
             if (flag) {
                 result.success("1");

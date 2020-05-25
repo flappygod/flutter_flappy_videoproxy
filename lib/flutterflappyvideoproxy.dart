@@ -10,6 +10,7 @@ typedef ProxyCacheSuccessListener = void Function();
 
 //代理服务器
 class Flutterflappyvideoproxy {
+
   //进度
   static Map<String, ProxyCacheProgressListener> _progressListeners =
       new Map<String, ProxyCacheProgressListener>();
