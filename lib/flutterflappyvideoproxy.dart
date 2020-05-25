@@ -10,7 +10,6 @@ typedef ProxyCacheSuccessListener = void Function();
 
 //代理服务器
 class Flutterflappyvideoproxy {
-
   //进度
   static Map<String, ProxyCacheProgressListener> _progressListeners =
       new Map<String, ProxyCacheProgressListener>();
@@ -106,6 +105,12 @@ class Flutterflappyvideoproxy {
     } else {
       return "";
     }
+  }
+
+  //初始化配置
+  static Future<void> proxyInit(int port, int poolSize) async {
+    await _channel.invokeMethod('proxyInit',
+        {"port": port.toString(), "poolSize": poolSize.toString()});
   }
 
   //开始进行代理

@@ -81,12 +81,24 @@ public class FlutterflappyvideoproxyPlugin implements FlutterPlugin, MethodCallH
 
     @Override
     public void onMethodCall(@NonNull MethodCall call, @NonNull final Result result) {
+
         //获取缓存地址
         if (call.method.equals("getCacheDictionary")) {
             //当前的路径
             String path = FlappyProxyServer.getInstance(context).getCacheDictionary();
             //成功
             result.success(path);
+        }
+        //开始代理
+        else if (call.method.equals("proxyInit")) {
+            //请求
+            final String port = call.argument("port");
+            //唯一值
+            final String poolSize = call.argument("poolSize");
+            //进行初始化
+            FlappyProxyServer.init(Integer.parseInt(port), Integer.parseInt(poolSize));
+            //成功了
+            result.success("1");
         }
         //开始代理
         else if (call.method.equals("proxyStart")) {
